@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Class="MauiApp2_Lab2.HomePage"
+             Title="Электронный магазин">
+
+    <!-- Стили для отображения результата валидации (ЛР6) -->
+    <ContentPage.Resources>
+        <Style x:Key="InvalidEntryStyle" TargetType="Entry">
+            <Setter Property="TextColor" Value="Red" />
+        </Style>
+        <Style x:Key="ValidEntryStyle" TargetType="Entry">
+            <Setter Property="TextColor" Value="Black" />
+        </Style>
+    </ContentPage.Resources>
+
+    <ContentPage.MenuBarItems>
+        <MenuBarItem Text="Действие">
+            <MenuFlyoutItem Text="Отменить" Command="{Binding CancelCommand}"/>
+            <MenuFlyoutSeparator/>
+            <MenuFlyoutItem Text="Создать" Command="{Binding CreateCommand}"/>
+            <MenuFlyoutItem Text="Редактировать" Command="{Binding EditCommand}"/>
+            <MenuFlyoutItem Text="Сохранить" Command="{Binding SaveCommand}"/>
+            <MenuFlyoutItem Text="Найти" Command="{Binding FindCommand}"/>
+            <MenuFlyoutSeparator/>
+            <MenuFlyoutItem Text="Удалить" Command="{Binding DeleteCommand}"/>
+            <MenuFlyoutSeparator/>
+            <MenuFlyoutItem Text="Добавить покупателя" Command="{Binding AddCustomerCommand}"/>
+        </MenuBarItem>
+        <MenuBarItem Text="Отчёт">
+            <MenuFlyoutItem Text="Список товаров" Command="{Binding ReportCommand}"/>
+            <MenuFlyoutItem Text="Продажи" Command="{Binding ReportCommand}"/>
+        </MenuBarItem>
+    </ContentPage.MenuBarItems>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Отменить" Order="Secondary" Command="{Binding CancelCommand}"/>
+        <ToolbarItem Text="Создать" Order="Secondary" Command="{Binding CreateCommand}"/>
+        <ToolbarItem Text="Редактировать" Order="Secondary" Command="{Binding EditCommand}"/>
+        <ToolbarItem Text="Сохранить" Order="Secondary" Command="{Binding SaveCommand}"/>
+        <ToolbarItem Text="Найти" Order="Secondary" Command="{Binding FindCommand}"/>
+        <ToolbarItem Text="Удалить" Order="Secondary" Command="{Binding DeleteCommand}"/>
+    </ContentPage.ToolbarItems>
+
+    <VerticalStackLayout>
+        <!-- Сетка отображения данных из базы (ЛР4) -->
+        <CollectionView x:Name="collectionView" SelectionMode="Single">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border Stroke="Black" StrokeThickness="1" Padding="5">
+                        <Grid ColumnDefinitions="2*,3*,*,*,2*" ColumnSpacing="5">
+                            <!-- Название: не пустое, не длиннее 150 символов (ЛР6) -->
+                            <Entry Text="{Binding Name}" Grid.Column="0">
+                                <Entry.Behaviors>
+                                    <toolkit:TextValidationBehavior
+                                        InvalidStyle="{StaticResource InvalidEntryStyle}"
+                                        ValidStyle="{StaticResource ValidEntryStyle}"
+                                        Flags="ValidateOnValueChanged"
+                                        MinimumLength="1"
+                                        MaximumLength="150"/>
+                                </Entry.Behaviors>
+                            </Entry>
+                            <Entry Text="{Binding Description}" Grid.Column="1"/>
+                            <!-- Цена: только числовое значение (ЛР6) -->
+                            <Entry Text="{Binding Price}" Grid.Column="2">
+                                <Entry.Behaviors>
+                                    <toolkit:NumericValidationBehavior
+                                        InvalidStyle="{StaticResource InvalidEntryStyle}"
+                                        ValidStyle="{StaticResource ValidEntryStyle}"
+                                        Flags="ValidateOnValueChanged"/>
+                                </Entry.Behaviors>
+                            </Entry>
+                            <Entry Text="{Binding StockQuantity}" Grid.Column="3"/>
+                            <Entry Text="{Binding Category.Name}" Grid.Column="4" IsReadOnly="True"/>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <Label HeightRequest="30"/>
+
+        <!-- Панель поиска (ЛР7) -->
+        <Border Stroke="Black" StrokeThickness="1" Padding="10">
+            <VerticalStackLayout Spacing="5">
+                <Label Text="Поиск" FontSize="Medium" HorizontalOptions="Center"/>
+
+                <SearchBar x:Name="SearchName" Placeholder="Название товара"/>
+
+                <SearchBar x:Name="SearchCategory" Placeholder="Категория"/>
+
+                <Button Text="Поиск" x:Name="SearchButton" Clicked="SearchButton_Clicked"/>
+
+            </VerticalStackLayout>
+        </Border>
+    </VerticalStackLayout>
+
+</ContentPage>

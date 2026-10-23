@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MauiApp_Lab1.HomePage"
+             Title="Электронный магазин">
+
+    <!-- Описание главного меню приложения -->
+    <ContentPage.MenuBarItems>
+        <MenuBarItem Text="Действие">
+            <MenuFlyoutItem Text="Отменить" Clicked="OnCancelClicked"/>
+            <MenuFlyoutSeparator/>
+            <MenuFlyoutItem Text="Создать" Clicked="OnCreateClicked"/>
+            <MenuFlyoutItem Text="Редактировать" Clicked="OnEditClicked"/>
+            <MenuFlyoutItem Text="Сохранить" Clicked="OnSaveClicked"/>
+            <MenuFlyoutItem Text="Найти" Clicked="OnFindClicked"/>
+            <MenuFlyoutSeparator/>
+            <MenuFlyoutItem Text="Удалить" Clicked="OnDeleteClicked"/>
+        </MenuBarItem>
+        <MenuBarItem Text="Отчёт">
+            <MenuFlyoutItem Text="Список товаров" Clicked="OnReportClicked"/>
+            <MenuFlyoutItem Text="Продажи" Clicked="OnReportClicked"/>
+            <MenuFlyoutSubItem Text="Период">
+                <MenuFlyoutItem Text="За день" Clicked="OnReportClicked"/>
+                <MenuFlyoutItem Text="За месяц" Clicked="OnReportClicked"/>
+                <MenuFlyoutItem Text="За год" Clicked="OnReportClicked"/>
+            </MenuFlyoutSubItem>
+        </MenuBarItem>
+    </ContentPage.MenuBarItems>
+
+    <!-- Панель инструментов: кнопки соответствуют подпунктам меню "Действие" -->
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Отменить" Order="Secondary" Clicked="OnCancelClicked"/>
+        <ToolbarItem Text="Создать" Order="Secondary" Clicked="OnCreateClicked"/>
+        <ToolbarItem Text="Редактировать" Order="Secondary" Clicked="OnEditClicked"/>
+        <ToolbarItem Text="Сохранить" Order="Secondary" Clicked="OnSaveClicked"/>
+        <ToolbarItem Text="Найти" Order="Secondary" Clicked="OnFindClicked"/>
+        <ToolbarItem Text="Удалить" Order="Secondary" Clicked="OnDeleteClicked"/>
+    </ContentPage.ToolbarItems>
+
+    <VerticalStackLayout Spacing="25" Padding="30" VerticalOptions="Center">
+        <Label Text="Разработка электронного магазина для предприятия"
+               VerticalOptions="Center"
+               HorizontalOptions="Center"
+               FontSize="22"
+               FontAttributes="Bold"
+               HorizontalTextAlignment="Center"/>
+        <Label Text="Лабораторная работа №1. Создание проекта и разработка интерфейса пользователя"
+               VerticalOptions="Center"
+               HorizontalOptions="Center"
+               FontSize="16"
+               HorizontalTextAlignment="Center"/>
+    </VerticalStackLayout>
+
+</ContentPage>

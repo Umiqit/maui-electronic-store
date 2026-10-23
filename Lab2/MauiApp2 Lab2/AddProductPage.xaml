@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Class="MauiApp2_Lab2.AddProductPage"
+             Title="Добавление товара">
+
+    <ContentPage.Resources>
+        <Style x:Key="InvalidEntryStyle" TargetType="Entry">
+            <Setter Property="TextColor" Value="Red" />
+        </Style>
+        <Style x:Key="ValidEntryStyle" TargetType="Entry">
+            <Setter Property="TextColor" Value="Black" />
+        </Style>
+    </ContentPage.Resources>
+
+    <VerticalStackLayout Spacing="10" Padding="20">
+
+        <Label Text="Название"/>
+        <Entry x:Name="NameEntry">
+            <Entry.Behaviors>
+                <toolkit:TextValidationBehavior
+                    InvalidStyle="{StaticResource InvalidEntryStyle}"
+                    ValidStyle="{StaticResource ValidEntryStyle}"
+                    Flags="ValidateOnValueChanged"
+                    MinimumLength="1"
+                    MaximumLength="150"/>
+            </Entry.Behaviors>
+        </Entry>
+
+        <Label Text="Описание"/>
+        <Entry x:Name="DescriptionEntry"/>
+
+        <Label Text="Цена"/>
+        <Entry x:Name="PriceEntry" Keyboard="Numeric">
+            <Entry.Behaviors>
+                <toolkit:NumericValidationBehavior
+                    InvalidStyle="{StaticResource InvalidEntryStyle}"
+                    ValidStyle="{StaticResource ValidEntryStyle}"
+                    Flags="ValidateOnValueChanged"/>
+            </Entry.Behaviors>
+        </Entry>
+
+        <Label Text="Количество на складе"/>
+        <Entry x:Name="StockEntry" Keyboard="Numeric">
+            <Entry.Behaviors>
+                <toolkit:NumericValidationBehavior
+                    InvalidStyle="{StaticResource InvalidEntryStyle}"
+                    ValidStyle="{StaticResource ValidEntryStyle}"
+                    Flags="ValidateOnValueChanged"/>
+            </Entry.Behaviors>
+        </Entry>
+
+        <Label Text="Категория"/>
+        <Picker x:Name="CategoryPicker" ItemDisplayBinding="{Binding Name}"/>
+
+        <Button Text="Добавить" x:Name="AddProductButton" Clicked="AddProductButton_Clicked"/>
+    </VerticalStackLayout>
+</ContentPage>
