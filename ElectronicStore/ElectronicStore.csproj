@@ -79,9 +79,9 @@
 		</PackageReference>
 
 		<!-- ЛР6: поведения валидации (TextValidationBehavior, NumericValidationBehavior).
-		     Версия 14.2.2 — последняя, совместимая с Microsoft.Maui.Controls 10.0.x;
-		     15.x требует >= 10.0.90, 17.x — уже под .NET 11. -->
-		<PackageReference Include="CommunityToolkit.Maui" Version="14.2.2" />
+		     13.0.0 — последняя версия, совместимая с Microsoft.Maui.Controls 10.0.20:
+		     14.x требует >= 10.0.60, 15.x — >= 10.0.90, 17.x собран под .NET 11. -->
+		<PackageReference Include="CommunityToolkit.Maui" Version="13.0.0" />
 
 		<!-- Звуковое сопровождение действий (звук успеха при сохранении и т.п.) -->
 		<PackageReference Include="Plugin.Maui.Audio" Version="4.0.0" />
