@@ -42,8 +42,18 @@ public partial class HomePage : ContentPage
         CreateCommand = new Command(execute: async () =>
             await Navigation.PushAsync(new AddProductPage()));
 
-        // Редактировать: помечает выбранный товар как изменённый (ЛР5)
-        EditCommand = new Command(execute: EditHandler);
+        // Редактировать: переход на страницу редактирования выбранного товара (ЛР5)
+        EditCommand = new Command(execute: async () =>
+        {
+            if (collectionView.SelectedItem is Product product)
+            {
+                await Navigation.PushAsync(new EditProductPage(product));
+            }
+            else
+            {
+                await DisplayAlertAsync("Редактировать", "Выберите товар в списке", "Ок");
+            }
+        });
 
         // Сохранить: фиксирует изменения в базе данных (ЛР5)
         SaveCommand = new Command(execute: SaveHandler);
@@ -128,14 +138,6 @@ public partial class HomePage : ContentPage
         await Task.WhenAll(
             StatusLabel.FadeToAsync(0, 300, Easing.CubicIn),
             StatusLabel.TranslateToAsync(0, -6, 300, Easing.CubicIn));
-    }
-
-    private void EditHandler(object sender)
-    {
-        if (this.collectionView.SelectedItem is Product product)
-        {
-            this.shopContext.Products.Update(product);
-        }
     }
 
     private async void SaveHandler(object sender)

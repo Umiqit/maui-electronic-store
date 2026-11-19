@@ -102,6 +102,9 @@
 	  <Compile Update="AddCustomerPage.xaml.cs">
 	    <DependentUpon>AddCustomerPage.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="EditProductPage.xaml.cs">
+	    <DependentUpon>EditProductPage.xaml</DependentUpon>
+	  </Compile>
 	</ItemGroup>
 
 </Project>

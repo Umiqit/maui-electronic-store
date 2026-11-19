@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Class="ElectronicStore.EditProductPage"
+             Title="Редактирование товара"
+             BackgroundColor="#FAFAFA">
+
+    <ContentPage.Resources>
+        <Style x:Key="InvalidEntryStyle" TargetType="Entry">
+            <Setter Property="TextColor" Value="#C42B1C" />
+        </Style>
+        <Style x:Key="ValidEntryStyle" TargetType="Entry">
+            <Setter Property="TextColor" Value="#242424" />
+        </Style>
+        <Style x:Key="FluentButton" TargetType="Button">
+            <Setter Property="BackgroundColor" Value="#0F6CBD" />
+            <Setter Property="TextColor" Value="White" />
+            <Setter Property="CornerRadius" Value="4" />
+            <Setter Property="FontAttributes" Value="Bold" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="HeightRequest" Value="36" />
+        </Style>
+        <Style x:Key="FieldLabel" TargetType="Label">
+            <Setter Property="TextColor" Value="#616161" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="FontAttributes" Value="Bold" />
+        </Style>
+    </ContentPage.Resources>
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="6" Padding="24" MaximumWidthRequest="520" HorizontalOptions="Center">
+
+            <Label x:Name="HeaderLabel" Text="Редактирование товара"
+                   FontSize="20" FontAttributes="Bold" TextColor="#0F6CBD" Margin="0,0,0,8"/>
+
+            <Label Text="НАЗВАНИЕ" Style="{StaticResource FieldLabel}"/>
+            <Entry x:Name="NameEntry" TextColor="#242424" PlaceholderColor="#8A8A8A" BackgroundColor="White">
+                <Entry.Behaviors>
+                    <toolkit:TextValidationBehavior
+                        InvalidStyle="{StaticResource InvalidEntryStyle}"
+                        ValidStyle="{StaticResource ValidEntryStyle}"
+                        Flags="ValidateOnValueChanged"
+                        MinimumLength="1"
+                        MaximumLength="150"/>
+                </Entry.Behaviors>
+            </Entry>
+
+            <Label Text="ОПИСАНИЕ" Style="{StaticResource FieldLabel}"/>
+            <Entry x:Name="DescriptionEntry" TextColor="#242424" PlaceholderColor="#8A8A8A" BackgroundColor="White"/>
+
+            <Label Text="ЦЕНА" Style="{StaticResource FieldLabel}"/>
+            <Entry x:Name="PriceEntry" Keyboard="Numeric" TextColor="#242424" PlaceholderColor="#8A8A8A" BackgroundColor="White">
+                <Entry.Behaviors>
+                    <toolkit:NumericValidationBehavior
+                        InvalidStyle="{StaticResource InvalidEntryStyle}"
+                        ValidStyle="{StaticResource ValidEntryStyle}"
+                        Flags="ValidateOnValueChanged"/>
+                </Entry.Behaviors>
+            </Entry>
+
+            <Label Text="КОЛИЧЕСТВО НА СКЛАДЕ" Style="{StaticResource FieldLabel}"/>
+            <Entry x:Name="StockEntry" Keyboard="Numeric" TextColor="#242424" PlaceholderColor="#8A8A8A" BackgroundColor="White">
+                <Entry.Behaviors>
+                    <toolkit:NumericValidationBehavior
+                        InvalidStyle="{StaticResource InvalidEntryStyle}"
+                        ValidStyle="{StaticResource ValidEntryStyle}"
+                        Flags="ValidateOnValueChanged"/>
+                </Entry.Behaviors>
+            </Entry>
+
+            <Label Text="КАТЕГОРИЯ" Style="{StaticResource FieldLabel}"/>
+            <Picker x:Name="CategoryPicker" TextColor="#242424" BackgroundColor="White"
+                    ItemDisplayBinding="{Binding Name}"/>
+
+            <Button Text="Сохранить изменения" x:Name="SaveButton"
+                    Style="{StaticResource FluentButton}" Margin="0,12,0,0"
+                    Clicked="SaveButton_Clicked"/>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

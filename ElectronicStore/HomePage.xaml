@@ -94,36 +94,20 @@
             <CollectionView x:Name="collectionView" Grid.Row="1" SelectionMode="Single">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
+                        <!-- Label вместо Entry: на Windows Entry внутри CollectionView
+                             приводит к нативному сбою WinUI (0xc000027b). Редактирование —
+                             на отдельной странице EditProductPage (ЛР5). -->
                         <Border BackgroundColor="White"
                                 Stroke="#E1E1E1" StrokeThickness="1"
                                 StrokeShape="RoundRectangle 8"
-                                Padding="12,8" Margin="0,3">
+                                Padding="12,10" Margin="0,3">
                             <Grid ColumnDefinitions="2*,3*,*,*,2*" ColumnSpacing="10">
-                                <!-- Название: не пустое, не длиннее 150 символов (ЛР6) -->
-                                <Entry Text="{Binding Name}" Style="{StaticResource FluentEntry}" Grid.Column="0">
-                                    <Entry.Behaviors>
-                                        <toolkit:TextValidationBehavior
-                                            InvalidStyle="{StaticResource InvalidEntryStyle}"
-                                            ValidStyle="{StaticResource ValidEntryStyle}"
-                                            Flags="ValidateOnValueChanged"
-                                            MinimumLength="1"
-                                            MaximumLength="150"/>
-                                    </Entry.Behaviors>
-                                </Entry>
-                                <Entry Text="{Binding Description}" Style="{StaticResource FluentEntry}" Grid.Column="1"/>
-                                <!-- Цена: только числовое значение (ЛР6) -->
-                                <Entry Text="{Binding Price}" Style="{StaticResource FluentEntry}" Grid.Column="2">
-                                    <Entry.Behaviors>
-                                        <toolkit:NumericValidationBehavior
-                                            InvalidStyle="{StaticResource InvalidEntryStyle}"
-                                            ValidStyle="{StaticResource ValidEntryStyle}"
-                                            Flags="ValidateOnValueChanged"/>
-                                    </Entry.Behaviors>
-                                </Entry>
-                                <Entry Text="{Binding StockQuantity}" Style="{StaticResource FluentEntry}" Grid.Column="3"/>
-                                <Entry Text="{Binding Category.Name}" Style="{StaticResource FluentEntry}"
-                                       FontAttributes="Bold" TextColor="#0F6CBD"
-                                       Grid.Column="4" IsReadOnly="True"/>
+                                <Label Text="{Binding Name}" FontSize="14" TextColor="#242424" Grid.Column="0"/>
+                                <Label Text="{Binding Description}" FontSize="14" TextColor="#616161" Grid.Column="1"/>
+                                <Label Text="{Binding Price, StringFormat='{0:0.00} ₽'}" FontSize="14" TextColor="#242424" Grid.Column="2"/>
+                                <Label Text="{Binding StockQuantity}" FontSize="14" TextColor="#242424" Grid.Column="3"/>
+                                <Label Text="{Binding Category.Name}" FontSize="14"
+                                       FontAttributes="Bold" TextColor="#0F6CBD" Grid.Column="4"/>
                             </Grid>
                         </Border>
                     </DataTemplate>
