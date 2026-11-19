@@ -3,15 +3,41 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="ElectronicStore.HomePage"
-             Title="Электронный магазин">
+             Title="Электронный магазин"
+             BackgroundColor="#FAFAFA">
 
-    <!-- Стили для отображения результата валидации (ЛР6) -->
     <ContentPage.Resources>
+        <!-- Стили результата валидации (ЛР6): красный / чёрный -->
         <Style x:Key="InvalidEntryStyle" TargetType="Entry">
-            <Setter Property="TextColor" Value="Red" />
+            <Setter Property="TextColor" Value="#C42B1C" />
         </Style>
         <Style x:Key="ValidEntryStyle" TargetType="Entry">
-            <Setter Property="TextColor" Value="Black" />
+            <Setter Property="TextColor" Value="#242424" />
+        </Style>
+
+        <!-- Стиль полей ввода в духе Fluent -->
+        <Style x:Key="FluentEntry" TargetType="Entry">
+            <Setter Property="TextColor" Value="#242424" />
+            <Setter Property="PlaceholderColor" Value="#8A8A8A" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="BackgroundColor" Value="Transparent" />
+        </Style>
+
+        <!-- Кнопка в фирменном синем Microsoft -->
+        <Style x:Key="FluentButton" TargetType="Button">
+            <Setter Property="BackgroundColor" Value="#0F6CBD" />
+            <Setter Property="TextColor" Value="White" />
+            <Setter Property="CornerRadius" Value="4" />
+            <Setter Property="FontAttributes" Value="Bold" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="HeightRequest" Value="36" />
+        </Style>
+
+        <!-- Текст подписей колонок -->
+        <Style x:Key="ColumnHeader" TargetType="Label">
+            <Setter Property="TextColor" Value="#616161" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="FontAttributes" Value="Bold" />
         </Style>
     </ContentPage.Resources>
 
@@ -43,57 +69,94 @@
         <ToolbarItem Text="Удалить" Order="Secondary" Command="{Binding DeleteCommand}"/>
     </ContentPage.ToolbarItems>
 
-    <VerticalStackLayout>
-        <!-- Сетка отображения данных из базы (ЛР4) -->
-        <CollectionView x:Name="collectionView" SelectionMode="Single">
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <Border Stroke="Black" StrokeThickness="1" Padding="5">
-                        <Grid ColumnDefinitions="2*,3*,*,*,2*" ColumnSpacing="5">
-                            <!-- Название: не пустое, не длиннее 150 символов (ЛР6) -->
-                            <Entry Text="{Binding Name}" Grid.Column="0">
-                                <Entry.Behaviors>
-                                    <toolkit:TextValidationBehavior
-                                        InvalidStyle="{StaticResource InvalidEntryStyle}"
-                                        ValidStyle="{StaticResource ValidEntryStyle}"
-                                        Flags="ValidateOnValueChanged"
-                                        MinimumLength="1"
-                                        MaximumLength="150"/>
-                                </Entry.Behaviors>
-                            </Entry>
-                            <Entry Text="{Binding Description}" Grid.Column="1"/>
-                            <!-- Цена: только числовое значение (ЛР6) -->
-                            <Entry Text="{Binding Price}" Grid.Column="2">
-                                <Entry.Behaviors>
-                                    <toolkit:NumericValidationBehavior
-                                        InvalidStyle="{StaticResource InvalidEntryStyle}"
-                                        ValidStyle="{StaticResource ValidEntryStyle}"
-                                        Flags="ValidateOnValueChanged"/>
-                                </Entry.Behaviors>
-                            </Entry>
-                            <Entry Text="{Binding StockQuantity}" Grid.Column="3"/>
-                            <Entry Text="{Binding Category.Name}" Grid.Column="4" IsReadOnly="True"/>
-                        </Grid>
-                    </Border>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
+    <Grid RowDefinitions="Auto,*,Auto,Auto" RowSpacing="0">
 
-        <Label HeightRequest="30"/>
-
-        <!-- Панель поиска (ЛР7) -->
-        <Border Stroke="Black" StrokeThickness="1" Padding="10">
-            <VerticalStackLayout Spacing="5">
-                <Label Text="Поиск" FontSize="Medium" HorizontalOptions="Center"/>
-
-                <SearchBar x:Name="SearchName" Placeholder="Название товара"/>
-
-                <SearchBar x:Name="SearchCategory" Placeholder="Категория"/>
-
-                <Button Text="Поиск" x:Name="SearchButton" Clicked="SearchButton_Clicked"/>
-
+        <!-- Шапка страницы -->
+        <Border Grid.Row="0" BackgroundColor="White" Stroke="#E1E1E1" StrokeThickness="1">
+            <VerticalStackLayout Padding="24,14">
+                <Label Text="Электронный магазин"
+                       FontSize="22" FontAttributes="Bold" TextColor="#0F6CBD"/>
+                <Label Text="Каталог товаров"
+                       FontSize="13" TextColor="#616161" Margin="0,2,0,0"/>
             </VerticalStackLayout>
         </Border>
-    </VerticalStackLayout>
+
+        <!-- Сетка отображения данных из базы (ЛР4) -->
+        <Grid Grid.Row="1" RowDefinitions="Auto,*" Margin="24,12,24,0">
+            <Grid Grid.Row="0" ColumnDefinitions="2*,3*,*,*,2*" Margin="0,0,0,4" ColumnSpacing="10">
+                <Label Text="НАЗВАНИЕ" Style="{StaticResource ColumnHeader}" Grid.Column="0"/>
+                <Label Text="ОПИСАНИЕ" Style="{StaticResource ColumnHeader}" Grid.Column="1"/>
+                <Label Text="ЦЕНА, ₽" Style="{StaticResource ColumnHeader}" Grid.Column="2"/>
+                <Label Text="ОСТАТОК" Style="{StaticResource ColumnHeader}" Grid.Column="3"/>
+                <Label Text="КАТЕГОРИЯ" Style="{StaticResource ColumnHeader}" Grid.Column="4"/>
+            </Grid>
+
+            <CollectionView x:Name="collectionView" Grid.Row="1" SelectionMode="Single">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border BackgroundColor="White"
+                                Stroke="#E1E1E1" StrokeThickness="1"
+                                StrokeShape="RoundRectangle 8"
+                                Padding="12,8" Margin="0,3">
+                            <Grid ColumnDefinitions="2*,3*,*,*,2*" ColumnSpacing="10">
+                                <!-- Название: не пустое, не длиннее 150 символов (ЛР6) -->
+                                <Entry Text="{Binding Name}" Style="{StaticResource FluentEntry}" Grid.Column="0">
+                                    <Entry.Behaviors>
+                                        <toolkit:TextValidationBehavior
+                                            InvalidStyle="{StaticResource InvalidEntryStyle}"
+                                            ValidStyle="{StaticResource ValidEntryStyle}"
+                                            Flags="ValidateOnValueChanged"
+                                            MinimumLength="1"
+                                            MaximumLength="150"/>
+                                    </Entry.Behaviors>
+                                </Entry>
+                                <Entry Text="{Binding Description}" Style="{StaticResource FluentEntry}" Grid.Column="1"/>
+                                <!-- Цена: только числовое значение (ЛР6) -->
+                                <Entry Text="{Binding Price}" Style="{StaticResource FluentEntry}" Grid.Column="2">
+                                    <Entry.Behaviors>
+                                        <toolkit:NumericValidationBehavior
+                                            InvalidStyle="{StaticResource InvalidEntryStyle}"
+                                            ValidStyle="{StaticResource ValidEntryStyle}"
+                                            Flags="ValidateOnValueChanged"/>
+                                    </Entry.Behaviors>
+                                </Entry>
+                                <Entry Text="{Binding StockQuantity}" Style="{StaticResource FluentEntry}" Grid.Column="3"/>
+                                <Entry Text="{Binding Category.Name}" Style="{StaticResource FluentEntry}"
+                                       FontAttributes="Bold" TextColor="#0F6CBD"
+                                       Grid.Column="4" IsReadOnly="True"/>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Grid>
+
+        <!-- Баннер статуса: появляется с анимацией при успешных действиях -->
+        <Label x:Name="StatusLabel" Grid.Row="2"
+               Text="Сохранено" TextColor="#107C10" FontAttributes="Bold"
+               HorizontalOptions="Center" Margin="0,6"
+               Opacity="0" TranslationY="8"/>
+
+        <!-- Панель поиска (ЛР7) -->
+        <Border x:Name="SearchPanel" Grid.Row="3" BackgroundColor="White"
+                Stroke="#E1E1E1" StrokeThickness="1" StrokeShape="RoundRectangle 8"
+                Padding="16,12" Margin="24,8,24,16">
+            <VerticalStackLayout Spacing="8">
+                <Label Text="Поиск" FontSize="14" FontAttributes="Bold" TextColor="#242424"/>
+
+                <SearchBar x:Name="SearchName" Placeholder="Название товара"
+                           PlaceholderColor="#8A8A8A" TextColor="#242424"
+                           BackgroundColor="#F5F5F5"/>
+
+                <SearchBar x:Name="SearchCategory" Placeholder="Категория"
+                           PlaceholderColor="#8A8A8A" TextColor="#242424"
+                           BackgroundColor="#F5F5F5"/>
+
+                <Button Text="Поиск" x:Name="SearchButton"
+                        Style="{StaticResource FluentButton}"
+                        Clicked="SearchButton_Clicked"/>
+            </VerticalStackLayout>
+        </Border>
+    </Grid>
 
 </ContentPage>

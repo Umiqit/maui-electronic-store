@@ -1,5 +1,6 @@
 using ElectronicStore.Data;
 using ElectronicStore.Models;
+using ElectronicStore.Services;
 
 namespace ElectronicStore;
 
@@ -26,6 +27,13 @@ public partial class AddProductPage : ContentPage
 
     private async void AddProductButton_Clicked(object sender, EventArgs e)
     {
+        // Анимация нажатия кнопки
+        if (sender is Button button)
+        {
+            await button.ScaleTo(0.96, 60);
+            await button.ScaleTo(1.0, 60);
+        }
+
         if (string.IsNullOrWhiteSpace(NameEntry.Text) ||
             !decimal.TryParse(PriceEntry.Text, out var price) ||
             !int.TryParse(StockEntry.Text, out var stock) ||
@@ -44,8 +52,16 @@ public partial class AddProductPage : ContentPage
             CategoryId = category.Id
         });
 
-        context.SaveChanges();
-        await DisplayAlertAsync("Добавить", "Товар добавлен в базу данных", "Ок");
-        await Navigation.PopAsync();
+        try
+        {
+            context.SaveChanges();
+            SoundService.PlaySuccess();
+            await DisplayAlertAsync("Добавить", "Товар добавлен в базу данных", "Ок");
+            await Navigation.PopAsync();
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlertAsync("Ошибка", ex.Message, "Ок");
+        }
     }
 }

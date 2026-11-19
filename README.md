@@ -24,7 +24,13 @@
 
 1. Установите PostgreSQL и pgAdmin.
 2. Откройте pgAdmin → Query Tool, выполните скрипт `sql/shopdb_postgres.sql` — будет создана база `shopdb` с тестовыми данными.
-3. Проверьте строку подключения в `ElectronicStore/Data/ShopContext.cs` (по умолчанию `Host=localhost;Port=5432;Database=shopdb;Username=postgres;Password=123456789`) — при необходимости замените пароль на свой.
+3. Строка подключения в `ElectronicStore/Data/ShopContext.cs`: `Host=localhost;Port=5432;Database=shopdb;Username=postgres;Password=umiqit1234` — при необходимости замените пароль на свой.
+
+## Оформление и мультимедиа
+
+- Дизайн в стиле Fluent (как у сайта Microsoft): фирменный синий `#0F6CBD`, белые карточки со скруглениями, плоские поля ввода.
+- Звук успеха (`Resources/Raw/success.wav`, воспроизведение через Plugin.Maui.Audio) при сохранении, удалении и добавлении записи.
+- Анимации: плавное появление списка и панели поиска, всплывающий статус-баннер с результатом действия, «нажатие» кнопок.
 
 ## Сборка и запуск
 

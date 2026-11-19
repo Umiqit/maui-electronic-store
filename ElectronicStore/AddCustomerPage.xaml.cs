@@ -1,5 +1,6 @@
 using ElectronicStore.Data;
 using ElectronicStore.Models;
+using ElectronicStore.Services;
 
 namespace ElectronicStore;
 
@@ -15,6 +16,13 @@ public partial class AddCustomerPage : ContentPage
 
     private async void AddCustomerButton_Clicked(object sender, EventArgs e)
     {
+        // Анимация нажатия кнопки
+        if (sender is Button button)
+        {
+            await button.ScaleTo(0.96, 60);
+            await button.ScaleTo(1.0, 60);
+        }
+
         if (string.IsNullOrWhiteSpace(NameEntry.Text) ||
             string.IsNullOrWhiteSpace(EmailEntry.Text))
         {
@@ -32,6 +40,7 @@ public partial class AddCustomerPage : ContentPage
         try
         {
             context.SaveChanges();
+            SoundService.PlaySuccess();
             await DisplayAlertAsync("Добавить", "Покупатель добавлен в базу данных", "Ок");
             await Navigation.PopAsync();
         }

@@ -2,6 +2,7 @@ using System.Collections.ObjectModel;
 using System.Windows.Input;
 using ElectronicStore.Data;
 using ElectronicStore.Models;
+using ElectronicStore.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace ElectronicStore;
@@ -21,6 +22,9 @@ public partial class HomePage : ContentPage
     public ICommand DeleteCommand { get; private set; }
     public ICommand ReportCommand { get; private set; }
     public ICommand AddCustomerCommand { get; private set; }
+
+    // Счётчик версий для статус-баннера (чтобы анимации не перекрывались)
+    private int statusVersion;
 
     public HomePage()
     {
@@ -57,11 +61,23 @@ public partial class HomePage : ContentPage
         this.BindingContext = this;
     }
 
-    // Загрузка данных при появлении страницы (ЛР4)
+    // Загрузка данных при появлении страницы (ЛР4) + анимация появления
     protected override void OnAppearing()
     {
         base.OnAppearing();
+
+        collectionView.Opacity = 0;
+        collectionView.TranslationY = 24;
+        SearchPanel.Opacity = 0;
+        SearchPanel.TranslationY = 16;
+
         LoadProducts();
+
+        _ = Task.WhenAll(
+            collectionView.FadeTo(1, 400, Easing.CubicOut),
+            collectionView.TranslateTo(0, 0, 400, Easing.CubicOut),
+            SearchPanel.FadeTo(1, 400, Easing.CubicOut),
+            SearchPanel.TranslateTo(0, 0, 400, Easing.CubicOut));
     }
 
     private void LoadProducts()
@@ -85,6 +101,30 @@ public partial class HomePage : ContentPage
         }
     }
 
+    // Показ баннера статуса с анимацией (всплывает и растворяется)
+    private async void ShowStatus(string text, Color color)
+    {
+        var version = ++statusVersion;
+        StatusLabel.Text = text;
+        StatusLabel.TextColor = color;
+        StatusLabel.Opacity = 0;
+        StatusLabel.TranslationY = 8;
+
+        await Task.WhenAll(
+            StatusLabel.FadeTo(1, 200, Easing.CubicOut),
+            StatusLabel.TranslateTo(0, 0, 200, Easing.CubicOut));
+
+        await Task.Delay(1600);
+        if (version != statusVersion)
+        {
+            return; // Успело появиться новое сообщение — не гасим его
+        }
+
+        await Task.WhenAll(
+            StatusLabel.FadeTo(0, 300, Easing.CubicIn),
+            StatusLabel.TranslateTo(0, -6, 300, Easing.CubicIn));
+    }
+
     private void EditHandler(object sender)
     {
         if (this.collectionView.SelectedItem is Product product)
@@ -98,7 +138,8 @@ public partial class HomePage : ContentPage
         try
         {
             this.shopContext.SaveChanges();
-            await DisplayAlertAsync("Сохранить", "Изменения сохранены в базе данных", "Ок");
+            SoundService.PlaySuccess();
+            ShowStatus("Изменения сохранены", Color.FromArgb("#107C10"));
         }
         catch (Exception ex)
         {
@@ -112,12 +153,21 @@ public partial class HomePage : ContentPage
         {
             this.shopContext.Products.Remove(product);
             this.Products.Remove(product);
+            SoundService.PlaySuccess();
+            ShowStatus($"Товар «{product.Name}» удалён", Color.FromArgb("#C42B1C"));
         }
     }
 
     // Поиск по названию товара и категории (ЛР7)
     private async void SearchButton_Clicked(object sender, EventArgs e)
     {
+        // Анимация нажатия кнопки
+        if (sender is Button button)
+        {
+            await button.ScaleTo(0.96, 60);
+            await button.ScaleTo(1.0, 60);
+        }
+
         string? name = string.IsNullOrWhiteSpace(SearchName.Text) ? null : SearchName.Text.Trim();
         string? category = string.IsNullOrWhiteSpace(SearchCategory.Text) ? null : SearchCategory.Text.Trim();
 
@@ -140,7 +190,15 @@ public partial class HomePage : ContentPage
             query = query.Where(p => EF.Functions.Like(p.Category.Name, $"%{category}%"));
         }
 
-        var found = query.ToList();
-        this.collectionView.ItemsSource = new ObservableCollection<Product>(found);
+        try
+        {
+            var found = query.ToList();
+            this.collectionView.ItemsSource = new ObservableCollection<Product>(found);
+            ShowStatus($"Найдено товаров: {found.Count}", Color.FromArgb("#0F6CBD"));
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlertAsync("Ошибка подключения к базе данных", ex.Message, "Ок");
+        }
     }
 }

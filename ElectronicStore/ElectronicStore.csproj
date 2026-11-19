@@ -80,6 +80,9 @@
 
 		<!-- ЛР6: поведения валидации (TextValidationBehavior, NumericValidationBehavior) -->
 		<PackageReference Include="CommunityToolkit.Maui" Version="15.0.1" />
+
+		<!-- Звуковое сопровождение действий (звук успеха при сохранении и т.п.) -->
+		<PackageReference Include="Plugin.Maui.Audio" Version="4.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
