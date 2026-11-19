@@ -14,13 +14,13 @@ public partial class AddCustomerPage : ContentPage
         context = new ShopContext();
     }
 
-    private async void AddCustomerButton_Clicked(object sender, EventArgs e)
+    private async void AddCustomerButton_Clicked(object? sender, EventArgs e)
     {
         // Анимация нажатия кнопки
         if (sender is Button button)
         {
-            await button.ScaleTo(0.96, 60);
-            await button.ScaleTo(1.0, 60);
+            await button.ScaleToAsync(0.96, 60);
+            await button.ScaleToAsync(1.0, 60);
         }
 
         if (string.IsNullOrWhiteSpace(NameEntry.Text) ||

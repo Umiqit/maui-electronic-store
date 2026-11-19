@@ -85,6 +85,11 @@
 
 		<!-- Звуковое сопровождение действий (звук успеха при сохранении и т.п.) -->
 		<PackageReference Include="Plugin.Maui.Audio" Version="4.0.0" />
+
+		<!-- Явные ссылки на пропатченные версии: гасят предупреждения
+		     об уязвимостях транзитивных зависимостей (входят через EF Core Tools) -->
+		<PackageReference Include="System.Security.Cryptography.Pkcs" Version="9.0.23" />
+		<PackageReference Include="System.Security.Cryptography.Xml" Version="9.0.23" />
 	</ItemGroup>
 
 	<ItemGroup>

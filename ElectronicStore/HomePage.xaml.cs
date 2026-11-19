@@ -74,10 +74,10 @@ public partial class HomePage : ContentPage
         LoadProducts();
 
         _ = Task.WhenAll(
-            collectionView.FadeTo(1, 400, Easing.CubicOut),
-            collectionView.TranslateTo(0, 0, 400, Easing.CubicOut),
-            SearchPanel.FadeTo(1, 400, Easing.CubicOut),
-            SearchPanel.TranslateTo(0, 0, 400, Easing.CubicOut));
+            collectionView.FadeToAsync(1, 400, Easing.CubicOut),
+            collectionView.TranslateToAsync(0, 0, 400, Easing.CubicOut),
+            SearchPanel.FadeToAsync(1, 400, Easing.CubicOut),
+            SearchPanel.TranslateToAsync(0, 0, 400, Easing.CubicOut));
     }
 
     private void LoadProducts()
@@ -111,8 +111,8 @@ public partial class HomePage : ContentPage
         StatusLabel.TranslationY = 8;
 
         await Task.WhenAll(
-            StatusLabel.FadeTo(1, 200, Easing.CubicOut),
-            StatusLabel.TranslateTo(0, 0, 200, Easing.CubicOut));
+            StatusLabel.FadeToAsync(1, 200, Easing.CubicOut),
+            StatusLabel.TranslateToAsync(0, 0, 200, Easing.CubicOut));
 
         await Task.Delay(1600);
         if (version != statusVersion)
@@ -121,8 +121,8 @@ public partial class HomePage : ContentPage
         }
 
         await Task.WhenAll(
-            StatusLabel.FadeTo(0, 300, Easing.CubicIn),
-            StatusLabel.TranslateTo(0, -6, 300, Easing.CubicIn));
+            StatusLabel.FadeToAsync(0, 300, Easing.CubicIn),
+            StatusLabel.TranslateToAsync(0, -6, 300, Easing.CubicIn));
     }
 
     private void EditHandler(object sender)
@@ -159,13 +159,13 @@ public partial class HomePage : ContentPage
     }
 
     // Поиск по названию товара и категории (ЛР7)
-    private async void SearchButton_Clicked(object sender, EventArgs e)
+    private async void SearchButton_Clicked(object? sender, EventArgs e)
     {
         // Анимация нажатия кнопки
         if (sender is Button button)
         {
-            await button.ScaleTo(0.96, 60);
-            await button.ScaleTo(1.0, 60);
+            await button.ScaleToAsync(0.96, 60);
+            await button.ScaleToAsync(1.0, 60);
         }
 
         string? name = string.IsNullOrWhiteSpace(SearchName.Text) ? null : SearchName.Text.Trim();
