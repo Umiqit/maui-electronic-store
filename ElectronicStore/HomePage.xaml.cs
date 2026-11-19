@@ -28,10 +28,12 @@ public partial class HomePage : ContentPage
 
     public HomePage()
     {
+        CrashLog.Write("HomePage: конструктор, начало");
         InitializeComponent();
 
         shopContext = new ShopContext();
         Products = new ObservableCollection<Product>();
+        CrashLog.Write("HomePage: конструктор, контекст создан");
 
         // Отмена: возвращает список к данным из базы (ЛР5)
         CancelCommand = new Command(execute: () => LoadProducts());
@@ -65,13 +67,16 @@ public partial class HomePage : ContentPage
     protected override void OnAppearing()
     {
         base.OnAppearing();
+        CrashLog.Write("HomePage: OnAppearing");
 
         collectionView.Opacity = 0;
         collectionView.TranslationY = 24;
         SearchPanel.Opacity = 0;
         SearchPanel.TranslationY = 16;
 
+        CrashLog.Write("HomePage: загрузка товаров из БД");
         LoadProducts();
+        CrashLog.Write("HomePage: загрузка завершена");
 
         _ = Task.WhenAll(
             collectionView.FadeToAsync(1, 400, Easing.CubicOut),
