@@ -35,9 +35,11 @@
 ## Сборка и запуск
 
 1. Откройте `ElectronicStore.slnx` в Visual Studio (требуется .NET 10 SDK с workload MAUI).
-2. Дождитесь восстановления NuGet-пакетов (`Npgsql.EntityFrameworkCore.PostgreSQL 10.0.3`, `Microsoft.EntityFrameworkCore.Tools 10.0.0`, `CommunityToolkit.Maui 15.0.1`).
+2. Дождитесь восстановления NuGet-пакетов (`Npgsql.EntityFrameworkCore.PostgreSQL 10.0.3`, `Microsoft.EntityFrameworkCore.Tools 10.0.0`, `CommunityToolkit.Maui 13.0.0`).
 3. Выберите цель запуска **Windows Machine** и нажмите F5.
 4. Убедитесь, что PostgreSQL запущен — иначе приложение покажет диалог с ошибкой подключения.
+
+> **Важно:** если приложение падает при запуске под отладчиком (F5), но работает без него (Ctrl+F5) — отключите инструменты диагностики XAML: Средства → Параметры → Отладка → Диагностика XAML → снимите флажки. Это известный конфликт дизайнера WinUI с .NET MAUI, к самому приложению отношения не имеет.
 
 ## NuGet-пакеты (ЛР3)
 
